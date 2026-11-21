@@ -1,4 +1,4 @@
-**Smart Elevator Simulator**
+ ## **Smart Elevator Simulator**
 
 ## Tema 1
 
