@@ -361,8 +361,10 @@ int main() {
         }
     }
 
-    while (!cladire.esteGata()) {
+    int pasi = 0;
+    while (!cladire.esteGata() && pasi < 200) {
         cladire.pasSimulare();
+        pasi++;
     }
 
     return 0;
