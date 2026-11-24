@@ -85,7 +85,7 @@ private:
     }
 
 public:
-    // Corectat: s-a eliminat referirea la directie din constructori
+
     Lift() : id(1), capacitateMaxPersoane(5), greutateMax(400), etajCurent(0), etajMaximServit(5), esteVip(false) {}
     
     Lift(int id, int capMax, int gMax, int etajC, int etajMaxS, bool vipLift)
@@ -142,8 +142,8 @@ public:
         return debarcati;
     }
 
-    void actualizeazaDeplasare(bool areCereriDeasupra) {
-        if ((!pasageriLaBord.empty() || areCereriDeasupra) && etajCurent < etajMaximServit) {
+    void actualizeazaDeplasare(bool) {
+        if (etajCurent < etajMaximServit) {
             etajCurent++;
         }
     }
