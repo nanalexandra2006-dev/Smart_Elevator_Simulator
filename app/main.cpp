@@ -329,7 +329,6 @@ public:
         return os;
     }
 };
-
 int main() {
     std::ifstream fin("tastatura.txt");
     if (fin.is_open()) {
@@ -361,8 +360,6 @@ int main() {
             cladire.adaugaPersoanaLaEtaj(p.getEtajCurent(), p);
         }
     }
-
-    std::cout << cladire << "\n";
 
     while (!cladire.esteGata()) {
         cladire.pasSimulare();
