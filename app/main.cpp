@@ -74,7 +74,6 @@ private:
     int etajCurent;
     int etajMaximServit;
     bool esteVip;
-    int directie; // Mereu +1 (urca)
     std::vector<Persoana> pasageriLaBord;
 
     int calculeazaGreutateCurenta() const {
@@ -86,10 +85,11 @@ private:
     }
 
 public:
-    Lift() : id(1), capacitateMaxPersoane(5), greutateMax(400), etajCurent(0), etajMaximServit(5), esteVip(false), directie(1) {}
+    // Corectat: s-a eliminat referirea la directie din constructori
+    Lift() : id(1), capacitateMaxPersoane(5), greutateMax(400), etajCurent(0), etajMaximServit(5), esteVip(false) {}
     
     Lift(int id, int capMax, int gMax, int etajC, int etajMaxS, bool vipLift)
-        : id(id), capacitateMaxPersoane(capMax), greutateMax(gMax), etajCurent(etajC), etajMaximServit(etajMaxS), esteVip(vipLift), directie(1) {}
+        : id(id), capacitateMaxPersoane(capMax), greutateMax(gMax), etajCurent(etajC), etajMaximServit(etajMaxS), esteVip(vipLift) {}
 
     bool estePlin() const {
         return pasageriLaBord.size() >= (size_t)capacitateMaxPersoane || calculeazaGreutateCurenta() >= greutateMax;
