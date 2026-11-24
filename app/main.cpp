@@ -142,11 +142,9 @@ public:
         return debarcati;
     }
 
-    void actualizeazaDeplasare(bool) {
+    void actualizeazaDeplasare(bool areCereriDeasupra) {
         if (etajCurent < etajMaximServit) {
             etajCurent++;
-        } else {
-            etajCurent = 0; 
         }
     }
 
