@@ -1,6 +1,6 @@
  ## **Smart Elevator & Buildind Traffic System**
  
-**Smart Elevator Simulator** este un proiect dezvoltat în limbajul C++ care simulează activitatea și fluxul de trafic dintr-o clădire deservită de lifturi inteligente.
+**Smart Elevator Simulator** este un proiect care simulează activitatea și fluxul de trafic dintr-o clădire cu lifturi inteligente (exemplu ##**PB Tower**).
 
 Scopul principal al aplicației este gestionarea eficientă a transportului de persoane între diferitele niveluri ale imobilului, menținerea parametrilor optimi de funcționare și evitarea blocajelor în fluxul de pasageri.
 
