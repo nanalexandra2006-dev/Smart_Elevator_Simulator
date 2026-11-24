@@ -142,15 +142,11 @@ public:
         return debarcati;
     }
 
-    void actualizeazaDeplasare(bool areCereriDeasupra) {
-        if (!pasageriLaBord.empty() || areCereriDeasupra) {
-            if (etajCurent < etajMaximServit) {
-                etajCurent++;
-            }
+    void actualizeazaDeplasare(bool) {
+        if (etajCurent < etajMaximServit) {
+            etajCurent++;
         } else {
-            if (etajCurent > 0) {
-                etajCurent--; // Coboară înapoi la 0 când este gol și nu are cereri deasupra
-            }
+            etajCurent = 0; 
         }
     }
 
