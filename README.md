@@ -2,14 +2,14 @@
  
 **Smart Elevator Simulator** este un proiect care simulează activitatea și fluxul de trafic dintr-o clădire cu lifturi inteligente (exemplu **PB Tower**).
 
-Scopul principal al aplicației este gestionarea eficientă a transportului de persoane între diferitele niveluri ale imobilului, menținerea parametrilor optimi de funcționare și evitarea blocajelor în fluxul de pasageri.
+Scopul principal al aplicației este gestionarea eficientă a transportului de persoane între diferitele niveluri ale clădirii, menținerea parametrilor optimi de funcționare și evitarea blocajelor în fluxul de pasageri.
 
-Iată principalele elemente și mecanici ale proiectului:
+ Principalele elemente ale proiectului:
 
-* **Structura clădirii și a etajelor:** imobilul este configurat cu un număr dinamic de etaje, fiecare dispunând de propria coadă de așteptare în care pasagerii sunt înregistrați la sosire.
-* **Entitatea „Persoană”:** fiecare pasager este definit prin atribute precise — etajul de plecare, etajul de destinație și greutatea proprie — elemente care determină eligibilitatea pentru îmbarcare.
-* **Funcționarea liftului:** fiecare cabină respectă limite stricte de capacitate și greutate maximă admisă; la oprirea pe un nivel, liftul analizează coada de așteptare și preia pasagerii care se încadrează în limitele de siguranță, ceilalți rămânând să aștepte următorul transport disponibil.
-* **Ciclul de simulare:** programul execută pași succesivi în care lifturile debarcă automat pasagerii ajunși la destinație, preiau noi călători și își continuă deplasarea pe verticală.
+* **Structura clădirii și a etajelor:** clădirea este configurată cu un număr de 9 etaje, fiecare dispunând de propria coadă de așteptare în care pasagerii sunt înregistrați la sosire.
+* **Entitatea „Persoană”:** fiecare pasager este definit prin atribute — etajul de plecare, etajul de destinație și greutatea proprie — elemente care determină eligibilitatea pentru îmbarcare.
+* **Funcționarea liftului:** fiecare lift respectă limite stricte de capacitate și greutate maximă admisă; la oprirea pe un etaj, liftul analizează coada de așteptare și preia pasagerii care se încadrează în limitele de siguranță, ceilalți rămânând să aștepte următorul lift disponibil.
+* **Ciclul de simulare:** programul execută pași succesivi în care lifturile debarcă automat pasagerii ajunși la destinație, preiau noi pasajeri și își continuă deplasarea.
 * **Protocolul de urgență:** în cazul declanșării unei alarme (cum ar fi o situație de incendiu), sistemul activează un scenariu de siguranță prin care toate lifturile sunt redirecționate direct către parter pentru evacuare.
 
 Simularea se încheie cu succes în momentul în care toate cererile de transport ale pasagerilor au fost procesate în siguranță, respectând constrângerile arhitecturii orientate-obiect.
