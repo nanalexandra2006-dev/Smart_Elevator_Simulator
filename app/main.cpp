@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-class persoana {
+class Persoana {
 private:
     int etajCurent;
     int etajDestinatie;
@@ -11,9 +11,9 @@ private:
     bool vip;
 
 public:
-    persoana() : etajCurent(0), etajDestinatie(1), greutate(70), vip(false) {}
+    Persoana() : etajCurent(0), etajDestinatie(1), greutate(70), vip(false) {}
     
-    persoana(int etajC, int etajD, int g, bool isVip) 
+    Persoana(int etajC, int etajD, int g, bool isVip) 
         : etajCurent(etajC), etajDestinatie(etajD), greutate(g), vip(isVip) {}
 
     int getEtajCurent() const { return etajCurent; }
@@ -21,7 +21,7 @@ public:
     int getGreutate() const { return greutate; }
     bool isVip() const { return vip; }
 
-    friend std::ostream& operator<<(std::ostream& os, const persoana& p) {
+    friend std::ostream& operator<<(std::ostream& os, const Persoana& p) {
         os << "persoana " << (p.vip ? "VIP" : "normala") 
            << ", plecare: etajul " << p.etajCurent 
            << ", destinatie -> etajul " << p.etajDestinatie 
@@ -29,7 +29,7 @@ public:
         return os;
     }
 
-    friend std::istream& operator>>(std::istream& is, persoana& p) {
+    friend std::istream& operator>>(std::istream& is, Persoana& p) {
         int vFlag = 0;
         is >> p.etajCurent >> p.etajDestinatie >> p.greutate >> vFlag;
         p.vip = (vFlag == 1);
@@ -37,16 +37,16 @@ public:
     }
 };
 
-class etaj {
+class Etaj {
 private:
     int numarEtaj;
-    std::vector<persoana> coadaAsteptare;
+    std::vector<Persoana> coadaAsteptare;
 
 public:
-    etaj() : numarEtaj(0) {}
-    explicit etaj(int nr) : numarEtaj(nr) {}
+    Etaj() : numarEtaj(0) {}
+    explicit Etaj(int nr) : numarEtaj(nr) {}
 
-    void adaugaPersoana(const persoana& p) {
+    void adaugaPersoana(const Persoana& p) {
         coadaAsteptare.push_back(p);
     }
 
@@ -56,18 +56,17 @@ public:
         return suma;
     }
 
-    std::vector<persoana>& getCoadaAsteptare() { return coadaAsteptare; }
-    const std::vector<persoana>& getCoadaAsteptare() const { return coadaAsteptare; }
-    int getNumarEtaj() const { return numarEtaj; }
+    std::vector<Persoana>& getCoadaAsteptare() { return coadaAsteptare; }
+    const std::vector<Persoana>& getCoadaAsteptare() const { return coadaAsteptare; }
 
-    friend std::ostream& operator<<(std::ostream& os, const etaj& e) {
+    friend std::ostream& operator<<(std::ostream& os, const Etaj& e) {
         os << "etajul " << e.numarEtaj << ", persoane in asteptare: " << e.coadaAsteptare.size() 
            << ", greutate totala: " << e.calculeazaGreutateTotalaAsteptare() << " kg";
         return os;
     }
 };
 
-class lift {
+class Lift {
 private:
     int id;
     int capacitateMaxPersoane;
@@ -76,7 +75,7 @@ private:
     int etajMaximServit;
     bool esteVip;
     int directie; // Mereu +1 (urca)
-    std::vector<persoana> pasageriLaBord;
+    std::vector<Persoana> pasageriLaBord;
 
     int calculeazaGreutateCurenta() const {
         int suma = 0;
@@ -87,9 +86,9 @@ private:
     }
 
 public:
-    lift() : id(1), capacitateMaxPersoane(5), greutateMax(400), etajCurent(0), etajMaximServit(5), esteVip(false), directie(1) {}
+    Lift() : id(1), capacitateMaxPersoane(5), greutateMax(400), etajCurent(0), etajMaximServit(5), esteVip(false), directie(1) {}
     
-    lift(int id, int capMax, int gMax, int etajC, int etajMaxS, bool vipLift)
+    Lift(int id, int capMax, int gMax, int etajC, int etajMaxS, bool vipLift)
         : id(id), capacitateMaxPersoane(capMax), greutateMax(gMax), etajCurent(etajC), etajMaximServit(etajMaxS), esteVip(vipLift), directie(1) {}
 
     bool estePlin() const {
@@ -100,7 +99,7 @@ public:
         return !pasageriLaBord.empty();
     }
 
-    bool esteResponsabilPentru(const persoana& p) const {
+    bool esteResponsabilPentru(const Persoana& p) const {
         if (esteVip) return p.isVip();
         if (p.isVip()) return false;
 
@@ -112,7 +111,7 @@ public:
         }
     }
 
-    bool poateDeserviSiAdauga(const persoana& p) const {
+    bool poateDeserviSiAdauga(const Persoana& p) const {
         if (!esteResponsabilPentru(p)) return false;
         if (estePlin()) return false;
 
@@ -123,7 +122,7 @@ public:
         return (greutateCurenta + p.getGreutate() <= greutateMax);
     }
 
-    void adaugaPasager(const persoana& p) {
+    void adaugaPasager(const Persoana& p) {
         pasageriLaBord.push_back(p);
     }
 
@@ -151,11 +150,9 @@ public:
 
     int getEtajCurent() const { return etajCurent; }
     int getId() const { return id; }
-    int getEtajMaximServit() const { return etajMaximServit; }
     bool getEsteVip() const { return esteVip; }
-    int getDirectie() const { return directie; }
 
-    friend std::ostream& operator<<(std::ostream& os, const lift& l) {
+    friend std::ostream& operator<<(std::ostream& os, const Lift& l) {
         os << "lift " << l.id << (l.esteVip ? " (VIP)" : " (standard)") 
            << ", etaj curent: " << l.etajCurent 
            << ", sens: urca"
@@ -164,22 +161,22 @@ public:
     }
 };
 
-struct configLift {
+struct ConfigLift {
     int etajMax;
     int greutateMax;
     int persMax;
     bool esteVip;
 };
 
-class cladire {
+class Cladire {
 private:
     std::string denumire;
     int totalEtaje;
     int numarLifturi;
-    etaj* etaje;
-    lift* lifturi;
+    Etaj* etaje;
+    Lift* lifturi;
 
-    bool arePersoaneDeasupra(const lift& lift) const {
+    bool arePersoaneDeasupra(const Lift& lift) const {
         for (int e = lift.getEtajCurent() + 1; e < totalEtaje; ++e) {
             for (const auto& p : etaje[e].getCoadaAsteptare()) {
                 if (lift.esteResponsabilPentru(p)) {
@@ -191,35 +188,35 @@ private:
     }
 
 public:
-    cladire(const std::string& denumire, int totalEtaje, int numarLifturi, const std::vector<configLift>& configuratii)
+    Cladire(const std::string& denumire, int totalEtaje, int numarLifturi, const std::vector<ConfigLift>& configuratii)
         : denumire(denumire), totalEtaje(totalEtaje), numarLifturi(numarLifturi) {
         
-        etaje = new etaj[totalEtaje];
+        etaje = new Etaj[totalEtaje];
         for (int i = 0; i < totalEtaje; ++i) {
-            etaje[i] = etaj(i);
+            etaje[i] = Etaj(i);
         }
 
-        lifturi = new lift[numarLifturi];
+        lifturi = new Lift[numarLifturi];
         for (int i = 0; i < numarLifturi; ++i) {
             int eMax = (i < (int)configuratii.size()) ? configuratii[i].etajMax : totalEtaje - 1;
             int gMax = (i < (int)configuratii.size()) ? configuratii[i].greutateMax : 400;
             int pMax = (i < (int)configuratii.size()) ? configuratii[i].persMax : 5;
             bool vFlag = (i < (int)configuratii.size()) ? configuratii[i].esteVip : false;
             
-            lifturi[i] = lift(i + 1, pMax, gMax, 0, eMax, vFlag);
+            lifturi[i] = Lift(i + 1, pMax, gMax, 0, eMax, vFlag);
         }
     }
 
-    cladire(const cladire& other)
+    Cladire(const Cladire& other)
         : denumire(other.denumire), totalEtaje(other.totalEtaje), numarLifturi(other.numarLifturi) {
-        etaje = new etaj[totalEtaje];
+        etaje = new Etaj[totalEtaje];
         for (int i = 0; i < totalEtaje; ++i) etaje[i] = other.etaje[i];
         
-        lifturi = new lift[numarLifturi];
+        lifturi = new Lift[numarLifturi];
         for (int i = 0; i < numarLifturi; ++i) lifturi[i] = other.lifturi[i];
     }
 
-    cladire& operator=(const cladire& other) {
+    Cladire& operator=(const Cladire& other) {
         if (this == &other) return *this;
         delete[] etaje;
         delete[] lifturi;
@@ -228,21 +225,21 @@ public:
         totalEtaje = other.totalEtaje;
         numarLifturi = other.numarLifturi;
 
-        etaje = new etaj[totalEtaje];
+        etaje = new Etaj[totalEtaje];
         for (int i = 0; i < totalEtaje; ++i) etaje[i] = other.etaje[i];
 
-        lifturi = new lift[numarLifturi];
+        lifturi = new Lift[numarLifturi];
         for (int i = 0; i < numarLifturi; ++i) lifturi[i] = other.lifturi[i];
 
         return *this;
     }
 
-    ~cladire() {
+    ~Cladire() {
         delete[] etaje;
         delete[] lifturi;
     }
 
-    void adaugaPersoanaLaEtaj(int indexEtaj, const persoana& p) {
+    void adaugaPersoanaLaEtaj(int indexEtaj, const Persoana& p) {
         if (indexEtaj >= 0 && indexEtaj < totalEtaje) {
             etaje[indexEtaj].adaugaPersoana(p);
         }
@@ -274,7 +271,7 @@ public:
             auto& coada = etaje[etajCurentLift].getCoadaAsteptare();
             
             for (auto it = coada.begin(); it != coada.end(); ) {
-                persoana p = *it;
+                Persoana p = *it;
                 bool imbarcat = false;
 
                 if (p.isVip()) {
@@ -319,7 +316,7 @@ public:
         std::cout << "\n";
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const cladire& c) {
+    friend std::ostream& operator<<(std::ostream& os, const Cladire& c) {
         os << c.denumire << ", etaje: " << c.totalEtaje << ", lifturi: " << c.numarLifturi << "\n";
         os << "itinerariu lifturi:\n";
         for (int i = 0; i < c.numarLifturi; ++i) {
@@ -345,21 +342,21 @@ int main() {
         nrLifturi = 3;
     }
 
-    std::vector<configLift> configuratii;
+    std::vector<ConfigLift> configuratii;
     for (int i = 0; i < nrLifturi; ++i) {
-        configLift cfg;
+        ConfigLift cfg;
         int vipFlag = 0;
         std::cin >> cfg.etajMax >> cfg.greutateMax >> cfg.persMax >> vipFlag;
         cfg.esteVip = (vipFlag == 1);
         configuratii.push_back(cfg);
     }
 
-    cladire cladire("PB Tower", nrEtaje, nrLifturi, configuratii);
+    Cladire cladire("PB Tower", nrEtaje, nrLifturi, configuratii);
 
     int nrPersoane = 0;
     if (std::cin >> nrPersoane) {
         for (int i = 0; i < nrPersoane; ++i) {
-            persoana p;
+            Persoana p;
             std::cin >> p;
             cladire.adaugaPersoanaLaEtaj(p.getEtajCurent(), p);
         }
