@@ -2,17 +2,17 @@
  
 **Smart Elevator Simulator** este un proiect care simulează activitatea și fluxul de trafic dintr-o clădire cu lifturi inteligente (exemplu **PB Tower**).
 
-Scopul principal al aplicației este gestionarea eficientă a transportului de persoane între diferitele niveluri ale clădirii, menținerea parametrilor optimi de funcționare și evitarea blocajelor în fluxul de pasageri.
+Scopul principal al aplicației este gestionarea eficientă a transportului de persoane între diferitele niveluri ale clădirii, menținerea parametrilor optimi de funcționare, respectarea limitelor fizice și optimizarea fluxului de pasageri în timp real.
 
- Principalele elemente ale proiectului:
+Principalele elemente ale proiectului:
 
-* **Structura clădirii și a etajelor:** clădirea este configurată cu un număr de 9 etaje, fiecare dispunând de propria coadă de așteptare în care pasagerii sunt înregistrați la sosire.
-* **Entitatea „Persoană”:** fiecare pasager este definit prin atribute — etajul de plecare, etajul de destinație și greutatea proprie — elemente care determină eligibilitatea pentru îmbarcare.
-* **Funcționarea liftului:** fiecare lift respectă limite stricte de capacitate și greutate maximă admisă; la oprirea pe un etaj, liftul analizează coada de așteptare și preia pasagerii care se încadrează în limitele de siguranță, ceilalți rămânând să aștepte următorul lift disponibil.
-* **Ciclul de simulare:** programul execută pași succesivi în care lifturile debarcă automat pasagerii ajunși la destinație, preiau noi pasajeri și își continuă deplasarea.
-* **Protocolul de urgență:** în cazul declanșării unei alarme (cum ar fi o situație de incendiu), sistemul activează un scenariu de siguranță prin care toate lifturile sunt redirecționate direct către parter pentru evacuare.
+* **Structura clădirii și a etajelor:** clădirea este configurată dinamic (de exemplu, cu un număr total de etaje și lifturi configurabile), fiecare etaj dispunând de propria coadă de așteptare în care pasagerii sunt înregistrați la sosire, fiind afișate selectiv doar nivelurile active care au persoane în așteptare.
+* **Entitatea „Persoană”:** fiecare pasager este definit prin atribute precise — etajul de plecare, etajul de destinație, greutatea proprie și statutul VIP — elemente care determină eligibilitatea și distribuirea către liftul potrivit.
+* **Funcționarea inteligentă a lifturilor:** fiecare lift respectă limite stricte de capacitate de persoane, greutate maximă admisă și intervale de etaje deservite (inclusiv lifturi dedicate pentru curse scurte, lungi sau prioritizare VIP); la oprirea pe un etaj, liftul analizează coada și preia pasagerii care se încadrează în limitele de siguranță.
+* **Ciclul de simulare:** programul execută pași succesivi în care lifturile debarcă automat pasagerii ajunși la destinație, îmbarcă noi pasageri din mers și își actualizează direcția de deplasare, afișând un jurnal clar de acțiuni fără blocaje sau mesaje repetitive.
+* **Gestionarea cazurilor limită și a fluxului:** sistemul previne eficient buclele de căutare și erorile de flux, asigurând o sincronizare curată între stările dinamice ale clădirii și execuția pas cu pas.
 
-Simularea se încheie cu succes în momentul în care toate cererile de transport ale pasagerilor au fost procesate în siguranță.
+Simularea se încheie cu succes în momentul în care toate cererile de transport ale pasagerilor au fost procesate în siguranță, moment în care toate lifturile sunt resetate și coborâte automat la parter (etajul 0).
 ## Tema 1
 
 #### Cerințe
