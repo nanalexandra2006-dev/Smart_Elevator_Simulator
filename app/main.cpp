@@ -130,7 +130,7 @@ public:
         int debarcati = 0;
         for (auto it = pasageriLaBord.begin(); it != pasageriLaBord.end(); ) {
             if (it->getEtajDestinatie() == etajCurentCorespunzator) {
-                std::cout << "   -> pasager " << (it->isVip() ? "VIP" : "normal") 
+                std::cout << "   -> persoana " << (it->isVip() ? "VIP" : "normal") 
                           << " a ajuns la destinatie (etajul " << etajCurentCorespunzator 
                           << ") si a coborat din liftul " << id << "\n";
                 it = pasageriLaBord.erase(it);
