@@ -58,6 +58,7 @@ public:
 
     std::vector<Persoana>& getCoadaAsteptare() { return coadaAsteptare; }
     const std::vector<Persoana>& getCoadaAsteptare() const { return coadaAsteptare; }
+    int getNumarEtaj() const { return numarEtaj; }
 
     friend std::ostream& operator<<(std::ostream& os, const Etaj& e) {
         os << "etajul " << e.numarEtaj << ", persoane in asteptare: " << e.coadaAsteptare.size() 
@@ -74,6 +75,7 @@ private:
     int etajCurent;
     int etajMaximServit;
     bool esteVip;
+    int directie;
     std::vector<Persoana> pasageriLaBord;
 
     int calculeazaGreutateCurenta() const {
@@ -85,11 +87,10 @@ private:
     }
 
 public:
-
-    Lift() : id(1), capacitateMaxPersoane(5), greutateMax(400), etajCurent(0), etajMaximServit(5), esteVip(false) {}
+    Lift() : id(1), capacitateMaxPersoane(5), greutateMax(400), etajCurent(0), etajMaximServit(5), esteVip(false), directie(1) {}
     
     Lift(int id, int capMax, int gMax, int etajC, int etajMaxS, bool vipLift)
-        : id(id), capacitateMaxPersoane(capMax), greutateMax(gMax), etajCurent(etajC), etajMaximServit(etajMaxS), esteVip(vipLift) {}
+        : id(id), capacitateMaxPersoane(capMax), greutateMax(gMax), etajCurent(etajC), etajMaximServit(etajMaxS), esteVip(vipLift), directie(1) {}
 
     bool estePlin() const {
         return pasageriLaBord.size() >= (size_t)capacitateMaxPersoane || calculeazaGreutateCurenta() >= greutateMax;
@@ -142,20 +143,35 @@ public:
         return debarcati;
     }
 
-    void actualizeazaDeplasare(bool areCereriDeasupra) {
-        if (etajCurent < etajMaximServit) {
-            etajCurent++;
+    void actualizeazaDeplasare(bool areCereriDeasupra, int etajDorit) {
+        if (!pasageriLaBord.empty() || areCereriDeasupra) {
+            if (etajCurent < etajDorit && etajCurent < etajMaximServit) {
+                directie = 1;
+                etajCurent++;
+            } else if (etajCurent > etajDorit) {
+                directie = -1;
+                etajCurent--;
+            }
+        } else {
+            if (etajCurent > 0) {
+                directie = -1;
+                etajCurent--;
+            } else {
+                directie = 1;
+            }
         }
     }
 
     int getEtajCurent() const { return etajCurent; }
     int getId() const { return id; }
+    int getEtajMaximServit() const { return etajMaximServit; }
     bool getEsteVip() const { return esteVip; }
+    int getDirectie() const { return directie; }
 
     friend std::ostream& operator<<(std::ostream& os, const Lift& l) {
         os << "lift " << l.id << (l.esteVip ? " (VIP)" : " (standard)") 
            << ", etaj curent: " << l.etajCurent 
-           << ", sens: urca"
+           << ", sens: " << (l.directie == 1 ? "urca" : "coboara")
            << ", la bord: " << l.pasageriLaBord.size();
         return os;
     }
@@ -176,15 +192,15 @@ private:
     Etaj* etaje;
     Lift* lifturi;
 
-    bool arePersoaneDeasupra(const Lift& lift) const {
+    int gasesteUrmatorulEtajCuCereri(const Lift& lift) const {
         for (int e = lift.getEtajCurent() + 1; e < totalEtaje; ++e) {
             for (const auto& p : etaje[e].getCoadaAsteptare()) {
                 if (lift.esteResponsabilPentru(p)) {
-                    return true;
+                    return e;
                 }
             }
         }
-        return false;
+        return lift.getEtajCurent();
     }
 
 public:
@@ -250,7 +266,7 @@ public:
             if (!etaje[i].getCoadaAsteptare().empty()) return false;
         }
         for (int i = 0; i < numarLifturi; ++i) {
-            if (lifturi[i].arePasageri()) return false;
+            if (lifturi[i].arePasageri() || lifturi[i].getEtajCurent() > 0) return false;
         }
         return true;
     }
@@ -261,7 +277,7 @@ public:
             
             std::cout << "liftul " << lifturi[i].getId() << (lifturi[i].getEsteVip() ? " VIP" : " STANDARD") 
                       << " - etaj -> " << etajCurentLift 
-                      << " - Sens -> urca\n";
+                      << " - Sens -> " << (lifturi[i].getDirectie() == 1 ? "urca" : "coboara") << "\n";
             
             lifturi[i].debarcaPasageriLaEtaj(etajCurentLift);
         }
@@ -310,8 +326,10 @@ public:
         }
 
         for (int i = 0; i < numarLifturi; ++i) {
-            bool cereriDeasupra = arePersoaneDeasupra(lifturi[i]);
-            lifturi[i].actualizeazaDeplasare(cereriDeasupra);
+            int etajCerere = gasesteUrmatorulEtajCuCereri(lifturi[i]);
+            bool areCereri = (etajCerere > lifturi[i].getEtajCurent());
+            int etajTinta = areCereri ? etajCerere : lifturi[i].getEtajMaximServit();
+            lifturi[i].actualizeazaDeplasare(areCereri, etajTinta);
         }
         std::cout << "\n";
     }
@@ -329,6 +347,7 @@ public:
         return os;
     }
 };
+
 int main() {
     std::ifstream fin("tastatura.txt");
     if (fin.is_open()) {
@@ -361,11 +380,16 @@ int main() {
         }
     }
 
-    int pasi = 0;
-    while (!cladire.esteGata() && pasi < 200) {
+    std::cout << cladire << "\n";
+
+    Cladire cladireCopie(cladire);
+    Cladire cladireAtribuita("temp", 1, 1, {{1, 100, 1, false}});
+    cladireAtribuita = cladire;
+
+    while (!cladire.esteGata()) {
         cladire.pasSimulare();
-        pasi++;
     }
+    cladire.pasSimulare(); // Afișează și ultimul pas în care toate lifturile au ajuns la etajul 0
 
     return 0;
 }
