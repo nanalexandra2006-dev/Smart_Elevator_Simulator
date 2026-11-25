@@ -130,7 +130,7 @@ public:
         int debarcati = 0;
         for (auto it = pasageriLaBord.begin(); it != pasageriLaBord.end(); ) {
             if (it->getEtajDestinatie() == etajCurentCorespunzator) {
-                std::cout << "   -> persoana " << (it->isVip() ? "VIP" : "normal") 
+                std::cout << "   -> pasager " << (it->isVip() ? "VIP" : "normal") 
                           << " a ajuns la destinatie (etajul " << etajCurentCorespunzator 
                           << ") si a coborat din liftul " << id << "\n";
                 it = pasageriLaBord.erase(it);
@@ -288,9 +288,8 @@ public:
         for (int i = 0; i < numarLifturi; ++i) {
             int etajCurentLift = lifturi[i].getEtajCurent();
             
-            bool esteActiv = (etajCurentLift > 0) && (lifturi[i].arePasageri() || lifturi[i].getDirectie() == 1 || lifturi[i].getDirectie() == -1);
-            
-            if (esteActiv) {
+            // Afișăm liftul doar dacă urcă sau dacă transportă pasageri (evită Broken pipe pe Unix/macOS)
+            if (lifturi[i].getDirectie() == 1 || lifturi[i].arePasageri()) {
                 std::cout << "liftul " << lifturi[i].getId() << (lifturi[i].getEsteVip() ? " VIP" : " STANDARD") 
                           << " - etaj -> " << etajCurentLift 
                           << " - sens -> " << (lifturi[i].getDirectie() == 1 ? "urca" : "coboara") << "\n";
@@ -351,6 +350,7 @@ public:
         std::cout << "\n";
     }
 
+    // Afișăm în starea curentă DOAR etajele care au persoane în așteptare
     friend std::ostream& operator<<(std::ostream& os, const Cladire& c) {
         os << c.denumire << ", etaje: " << c.totalEtaje << ", lifturi: " << c.numarLifturi << "\n";
         os << "itinerariu lifturi:\n";
@@ -359,7 +359,9 @@ public:
         }
         os << "stare curenta:\n";
         for (int i = 0; i < c.totalEtaje; ++i) {
-            os << "  - " << c.etaje[i] << "\n";
+            if (!c.etaje[i].getCoadaAsteptare().empty()) {
+                os << "  - " << c.etaje[i] << "\n";
+            }
         }
         return os;
     }
