@@ -161,6 +161,12 @@ public:
         }
     }
 
+    void seteazaLaParter() {
+        etajCurent = 0;
+        directie = 1;
+        pasageriLaBord.clear();
+    }
+
     int getEtajCurent() const { return etajCurent; }
     int getId() const { return id; }
     int getEtajMaximServit() const { return etajMaximServit; }
@@ -194,7 +200,9 @@ private:
     int gasesteUrmatorulEtajCuCereri(const Lift& lift) const {
         for (int e = lift.getEtajCurent() + 1; e < totalEtaje; ++e) {
             for (const auto& p : etaje[e].getCoadaAsteptare()) {
-                if (lift.esteResponsabilPentru(p)) {
+                if (lift.esteResponsabilPentru(p) && 
+                    p.getEtajDestinatie() > p.getEtajCurent() && 
+                    p.getEtajDestinatie() <= lift.getEtajMaximServit()) {
                     return e;
                 }
             }
@@ -265,18 +273,28 @@ public:
             if (!etaje[i].getCoadaAsteptare().empty()) return false;
         }
         for (int i = 0; i < numarLifturi; ++i) {
-            if (lifturi[i].arePasageri() || lifturi[i].getEtajCurent() > 0) return false;
+            if (lifturi[i].arePasageri()) return false;
         }
         return true;
+    }
+
+    void reseteazaLifturiLaParter() {
+        for (int i = 0; i < numarLifturi; ++i) {
+            lifturi[i].seteazaLaParter();
+        }
     }
 
     void pasSimulare() {
         for (int i = 0; i < numarLifturi; ++i) {
             int etajCurentLift = lifturi[i].getEtajCurent();
             
-            std::cout << "liftul " << lifturi[i].getId() << (lifturi[i].getEsteVip() ? " VIP" : " STANDARD") 
-                      << " - etaj -> " << etajCurentLift 
-                      << " - sens -> " << (lifturi[i].getDirectie() == 1 ? "urca" : "coboara") << "\n";
+            // Afișăm liftul doar dacă este activ (a plecat de la 0, are pasageri sau coboară)
+            bool esteActiv = (etajCurentLift > 0) || lifturi[i].arePasageri() || (lifturi[i].getDirectie() == -1);
+            if (esteActiv) {
+                std::cout << "liftul " << lifturi[i].getId() << (lifturi[i].getEsteVip() ? " VIP" : " STANDARD") 
+                          << " - etaj -> " << etajCurentLift 
+                          << " - sens -> " << (lifturi[i].getDirectie() == 1 ? "urca" : "coboara") << "\n";
+            }
             
             lifturi[i].debarcaPasageriLaEtaj(etajCurentLift);
         }
@@ -391,7 +409,11 @@ int main() {
     while (!cladire.esteGata()) {
         cladire.pasSimulare();
     }
-    cladire.pasSimulare();
 
+    cladire.reseteazaLifturiLaParter();
+
+    std::cout << "toate persoanele au fost duse la etajul dorit \n";
+    std::cout << "toate lifturile au coborat la parter\n";
+ 
     return 0;
 }
