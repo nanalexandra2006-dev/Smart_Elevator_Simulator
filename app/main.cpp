@@ -288,7 +288,6 @@ public:
         for (int i = 0; i < numarLifturi; ++i) {
             int etajCurentLift = lifturi[i].getEtajCurent();
             
-            // Afișăm liftul doar dacă urcă sau dacă transportă pasageri (evită Broken pipe pe Unix/macOS)
             if (lifturi[i].getDirectie() == 1 || lifturi[i].arePasageri()) {
                 std::cout << "liftul " << lifturi[i].getId() << (lifturi[i].getEsteVip() ? " VIP" : " STANDARD") 
                           << " - etaj -> " << etajCurentLift 
