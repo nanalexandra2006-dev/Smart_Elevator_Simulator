@@ -130,7 +130,7 @@ public:
         int debarcati = 0;
         for (auto it = pasageriLaBord.begin(); it != pasageriLaBord.end(); ) {
             if (it->getEtajDestinatie() == etajCurentCorespunzator) {
-                std::cout << "   -> pasager " << (it->isVip() ? "VIP" : "normal") 
+                std::cout << "   -> persoana " << (it->isVip() ? "VIP" : "normal") 
                           << " a ajuns la destinatie (etajul " << etajCurentCorespunzator 
                           << ") si a coborat din liftul " << id << "\n";
                 it = pasageriLaBord.erase(it);
@@ -197,7 +197,6 @@ private:
     Etaj* etaje;
     Lift* lifturi;
 
-    // Caută exclusiv cereri valide pentru a preveni buclele infinite
     int gasesteUrmatorulEtajCuCereri(const Lift& lift) const {
         for (int e = lift.getEtajCurent() + 1; e < totalEtaje; ++e) {
             for (const auto& p : etaje[e].getCoadaAsteptare()) {
@@ -289,8 +288,9 @@ public:
         for (int i = 0; i < numarLifturi; ++i) {
             int etajCurentLift = lifturi[i].getEtajCurent();
             
-            // Afișăm liftul doar dacă urcă sau dacă transportă pasageri (evită Broken pipe pe Unix/macOS)
-            if (lifturi[i].getDirectie() == 1 || lifturi[i].arePasageri()) {
+            bool esteActiv = (etajCurentLift > 0) && (lifturi[i].arePasageri() || lifturi[i].getDirectie() == 1 || lifturi[i].getDirectie() == -1);
+            
+            if (esteActiv) {
                 std::cout << "liftul " << lifturi[i].getId() << (lifturi[i].getEsteVip() ? " VIP" : " STANDARD") 
                           << " - etaj -> " << etajCurentLift 
                           << " - sens -> " << (lifturi[i].getDirectie() == 1 ? "urca" : "coboara") << "\n";
